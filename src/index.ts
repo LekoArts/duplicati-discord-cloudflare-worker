@@ -12,7 +12,12 @@ app.get('/', (c) => {
 
 app.post('/:channel_id/:webhook_id', validator('json', (value) => value), async (c) => {
   const { channel_id, webhook_id } = c.req.param()
-  const discordWebhookUrl = `https://discord.com/api/webhooks/${channel_id}/${webhook_id}`
+  const thread_id = c.req.query('thread_id')
+  let discordWebhookUrl = `https://discord.com/api/webhooks/${channel_id}/${webhook_id}`
+
+  if (thread_id) {
+    discordWebhookUrl += `?thread_id=${encodeURIComponent(thread_id)}`
+  }
 
   const body = c.req.valid('json') as DuplicatiResponse
   const discordEmbed = createEmbed(body)
