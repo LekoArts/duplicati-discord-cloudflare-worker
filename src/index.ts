@@ -16,6 +16,7 @@ app.post('/:channel_id/:webhook_id', validator('json', (value) => value), async 
   let discordWebhookUrl = `https://discord.com/api/webhooks/${channel_id}/${webhook_id}`
 
   if (thread_id) {
+    // See https://discord.com/developers/docs/resources/webhook#execute-webhook
     discordWebhookUrl += `?thread_id=${encodeURIComponent(thread_id)}`
   }
 
