@@ -43,4 +43,23 @@ describe('worker', () => {
     expect(res.status).toBe(200)
     expect(body).toEqual({ message: 'Discord webhook successfully triggered' })
   })
+  it('should handle thread_id request parameter', async () => {
+    fetchMock
+      .get('https://discord.com')
+      .intercept({ path: '/api/webhooks/channel/webhook-id?thread_id=123', method: 'POST' })
+      .reply(200)
+
+    const res = await app.request('/channel/webhook-id?thread_id=123', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(duplicatiSuccess),
+    }, env)
+
+    const body = await res.json()
+
+    expect(res.status).toBe(200)
+    expect(body).toEqual({ message: 'Discord webhook successfully triggered' })
+  })
 })
